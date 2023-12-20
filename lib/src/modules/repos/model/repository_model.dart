@@ -96,7 +96,7 @@ class Repository with _$Repository {
     @JsonKey(name: 'open_issues') int? openIssues,
     @JsonKey(name: 'watchers') int? watchers,
     @JsonKey(name: 'default_branch') String? defaultBranch,
-    @JsonKey(name: 'score') int? score,
+    @JsonKey(name: 'score') double? score,
   }) = _Repository;
 
   factory Repository.fromJson(Map<String, dynamic> json) => _$RepositoryFromJson(json);

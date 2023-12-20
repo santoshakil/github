@@ -381,7 +381,7 @@ mixin _$Repository {
   @JsonKey(name: 'default_branch')
   String? get defaultBranch => throw _privateConstructorUsedError;
   @JsonKey(name: 'score')
-  int? get score => throw _privateConstructorUsedError;
+  double? get score => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -476,7 +476,7 @@ abstract class $RepositoryCopyWith<$Res> {
       @JsonKey(name: 'open_issues') int? openIssues,
       @JsonKey(name: 'watchers') int? watchers,
       @JsonKey(name: 'default_branch') String? defaultBranch,
-      @JsonKey(name: 'score') int? score});
+      @JsonKey(name: 'score') double? score});
 
   $OwnerCopyWith<$Res>? get owner;
   $LicenseCopyWith<$Res>? get license;
@@ -896,7 +896,7 @@ class _$RepositoryCopyWithImpl<$Res, $Val extends Repository>
       score: freezed == score
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
     ) as $Val);
   }
 
@@ -1014,7 +1014,7 @@ abstract class _$$RepositoryImplCopyWith<$Res>
       @JsonKey(name: 'open_issues') int? openIssues,
       @JsonKey(name: 'watchers') int? watchers,
       @JsonKey(name: 'default_branch') String? defaultBranch,
-      @JsonKey(name: 'score') int? score});
+      @JsonKey(name: 'score') double? score});
 
   @override
   $OwnerCopyWith<$Res>? get owner;
@@ -1434,7 +1434,7 @@ class __$$RepositoryImplCopyWithImpl<$Res>
       score: freezed == score
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
     ));
   }
 }
@@ -1776,7 +1776,7 @@ class _$RepositoryImpl implements _Repository {
   final String? defaultBranch;
   @override
   @JsonKey(name: 'score')
-  final int? score;
+  final double? score;
 
   @override
   String toString() {
@@ -2095,7 +2095,7 @@ abstract class _Repository implements Repository {
       @JsonKey(name: 'open_issues') final int? openIssues,
       @JsonKey(name: 'watchers') final int? watchers,
       @JsonKey(name: 'default_branch') final String? defaultBranch,
-      @JsonKey(name: 'score') final int? score}) = _$RepositoryImpl;
+      @JsonKey(name: 'score') final double? score}) = _$RepositoryImpl;
 
   factory _Repository.fromJson(Map<String, dynamic> json) =
       _$RepositoryImpl.fromJson;
@@ -2339,7 +2339,7 @@ abstract class _Repository implements Repository {
   String? get defaultBranch;
   @override
   @JsonKey(name: 'score')
-  int? get score;
+  double? get score;
   @override
   @JsonKey(ignore: true)
   _$$RepositoryImplCopyWith<_$RepositoryImpl> get copyWith =>
