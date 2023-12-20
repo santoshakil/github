@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github/src/extensions/context.dart';
 
+import '../model/repository_model.dart';
 import '../provider/repos_provider.dart';
 
 class RepositoriesView extends ConsumerWidget {
@@ -31,12 +33,38 @@ class RepositoriesView extends ConsumerWidget {
                     itemCount: data.length,
                     padding: const EdgeInsets.all(8.0),
                     separatorBuilder: (_, __) => const Divider(),
-                    itemBuilder: (_, index) => ListTile(
-                      title: Text(data[index].name ?? ''),
-                      subtitle: Text(data[index].description ?? ''),
-                    ),
+                    itemBuilder: (_, index) => RepositoryCard(data[index]),
                   ),
                 ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class RepositoryCard extends StatelessWidget {
+  const RepositoryCard(this.data, {super.key});
+  final Repository data;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(data.fullName ?? '', style: context.text.titleMedium),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(data.description ?? '', style: context.text.labelMedium),
+          DefaultTextStyle(
+            style: context.text.labelSmall!,
+            child: Wrap(
+              spacing: 8.0,
+              children: [
+                Text('Stars: ${data.stargazersCount ?? 0},'),
+                Text('Issues: ${data.openIssuesCount ?? 0},'),
+                Text('Forks: ${data.forksCount ?? 0}'),
+              ],
+            ),
           ),
         ],
       ),
