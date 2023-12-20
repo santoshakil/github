@@ -11,3 +11,7 @@ void initDio([String? baseUrl]) {
   if (kReleaseMode) return;
   dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true));
 }
+
+class Uris {
+  static const searchRepos = '/search/repositories';
+}

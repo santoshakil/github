@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'extensions/context.dart';
+import 'modules/repos/view/repos_view.dart';
 import 'utils/theme.dart';
 import 'utils/utils.dart';
 
@@ -13,11 +14,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: darkTheme,
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+      home: const RepositoriesView(),
     );
   }
 }
