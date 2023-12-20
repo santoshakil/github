@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +13,7 @@ class RepositoriesView extends ConsumerWidget {
       appBar: AppBar(title: const Text('Repositories')),
       body: Column(
         children: [
-          TextField(
+          TextFormField(
             onChanged: ref.read(searchControllerProvider.notifier).onChanged,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
@@ -21,15 +22,20 @@ class RepositoriesView extends ConsumerWidget {
           ),
           Expanded(
             child: ref.watch(searchRepositoryProvider).when(
-                  data: (data) => ListView.builder(
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (e, s) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: kReleaseMode ? Center(child: Text('$e')) : Center(child: Text('$e\n$s')),
+                  ),
+                  data: (data) => ListView.separated(
                     itemCount: data.length,
+                    padding: const EdgeInsets.all(8.0),
+                    separatorBuilder: (_, __) => const Divider(),
                     itemBuilder: (_, index) => ListTile(
                       title: Text(data[index].name ?? ''),
                       subtitle: Text(data[index].description ?? ''),
                     ),
                   ),
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, s) => Center(child: Text('$e\n$s')),
                 ),
           ),
         ],
