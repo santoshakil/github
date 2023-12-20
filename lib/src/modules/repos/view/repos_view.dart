@@ -2,11 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github/src/extensions/context.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../details/view/repo_details_view.dart';
 import '../model/repository_model.dart';
 import '../provider/repos_provider.dart';
 
 class RepositoriesView extends ConsumerWidget {
+  static const route = '/';
+
   const RepositoriesView({super.key});
 
   @override
@@ -50,6 +54,7 @@ class RepositoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () async => await context.push(RepositoryDetailsView.route, extra: data),
       title: Text(data.fullName ?? '', style: context.text.titleMedium),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
