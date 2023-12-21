@@ -4,5 +4,5 @@ A GitHub Mobile App built with Flutter.
 
 ## Screenshots
 
-![Home](https://github.com/santoshakil/github/blob/main/screenshots/home.png)
-![Details](https://github.com/santoshakil/github/blob/main/screenshots/details.png)
+![Home](https://gitlab.com/santoshakil/github/-/raw/main/screenshots/home.png?ref_type=heads)
+![Details](https://gitlab.com/santoshakil/github/-/raw/main/screenshots/details.png?ref_type=heads)
