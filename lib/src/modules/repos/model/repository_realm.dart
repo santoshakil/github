@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:realm/realm.dart';
 
+import '../../../db/db.dart';
 import 'repository_model.dart';
 
 part 'repository_realm.g.dart';
@@ -29,4 +30,10 @@ extension RepositoryExtension on Repository {
     ..updatedAt = DateTime.now().millisecondsSinceEpoch
     ..stargazersCount = stargazersCount
     ..forks = forks;
+
+  void save() => db.write(() => db.add(toRealmData, update: true));
+}
+
+extension ListRepositoryExtension on List<Repository> {
+  Future<void> save() async => await db.writeAsync(() => db.addAll(map((e) => e.toRealmData).toList(), update: true));
 }
