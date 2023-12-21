@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github/src/extensions/context.dart';
@@ -26,22 +25,29 @@ class RepositoriesView extends ConsumerWidget {
               hintText: 'Search',
             ),
           ),
-          Expanded(
-            child: ref.watch(searchRepositoryProvider).when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, s) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: kReleaseMode ? Center(child: Text('$e')) : Center(child: Text('$e\n$s')),
-                  ),
-                  data: (data) => ListView.separated(
-                    itemCount: data.length,
-                    padding: const EdgeInsets.all(8.0),
-                    separatorBuilder: (_, __) => const Divider(),
-                    itemBuilder: (_, index) => RepositoryCard(data[index]),
-                  ),
-                ),
-          ),
+          const RepositoryListView(),
         ],
+      ),
+    );
+  }
+}
+
+class RepositoryListView extends ConsumerWidget {
+  const RepositoryListView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final apiDta = ref.watch(getRepositoryProvider);
+    final data = ref.watch(repositoriesProvider);
+    if (data.isLoading && apiDta.isLoading) return const Center(child: CircularProgressIndicator());
+    if (data.hasError || apiDta.hasError) return Center(child: Text('${apiDta.error}'));
+    return Expanded(
+      child: ListView.separated(
+        controller: ref.watch(repoListScrollControllerProvider),
+        itemCount: data.value?.length ?? 0,
+        padding: const EdgeInsets.all(8.0),
+        separatorBuilder: (_, __) => const Divider(),
+        itemBuilder: (_, index) => RepositoryCard(data.value![index]),
       ),
     );
   }

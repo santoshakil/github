@@ -263,9 +263,3 @@ Map<String, dynamic> _$$OwnerImplToJson(_$OwnerImpl instance) =>
       'type': instance.type,
       'site_admin': instance.siteAdmin,
     };
-
-// **************************************************************************
-// RealmObjectGenerator
-// **************************************************************************
-
-// ignore_for_file: type=lint

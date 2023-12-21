@@ -3,8 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'repository_model.freezed.dart';
 part 'repository_model.g.dart';
 
-enum SortBy { stars, forks, updated, defaultSort }
-
 @freezed
 class RepositoryResponse with _$RepositoryResponse {
   const factory RepositoryResponse({

@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:github/src/db/db.dart';
-import 'package:github/src/modules/repos/model/repository_realm.dart';
+import 'package:github/src/modules/repos/model/repository_data.dart';
 
 import '../modules/repos/model/repository_model.dart';
 
@@ -28,8 +28,11 @@ Future<void> _isolate(List v) async {
     await initDB(v.last as String);
     await for (final data in receivePort) {
       if (data is List<Repository>) {
+        final start = DateTime.now().millisecondsSinceEpoch;
         debugPrint('Saving repos to realm');
-        await data.save();
+        data.save();
+        final end = DateTime.now().millisecondsSinceEpoch;
+        debugPrint('Saved ${data.length} repos to realm in ${end - start} ms');
       } else {
         debugPrint('Unknown data: $data');
       }
