@@ -3,6 +3,7 @@ import 'package:github/src/extensions/response.dart';
 import 'package:github/src/isolate/isolate.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../db/db.dart';
 import '../../../http/http.dart';
 import '../model/repository_data.dart';
 import '../model/repository_model.dart';
@@ -21,12 +22,13 @@ class GetRepository extends _$GetRepository {
   @override
   Future<RepositoryResponse?> build() async {
     try {
+      final page = ref.watch(currentPageProvider);
       final sort = ref.watch(reposSortingProvider);
       final query = ref.watch(searchControllerProvider);
       final res = await dio.get(Uris.searchRepos, queryParameters: {
         'q': query,
         if (sort.api != null) 'sort': sort.api,
-        'page': ref.watch(currentPageProvider),
+        'page': page,
         'per_page': 10,
       });
       if (!res.isSuccessful) return null;
@@ -41,24 +43,47 @@ class GetRepository extends _$GetRepository {
 }
 
 @Riverpod(keepAlive: true)
+class LastSync extends _$LastSync {
+  DateTime _lastSync = DateTime.now();
+
+  @override
+  Stream<Duration> build() {
+    return Stream.periodic(const Duration(seconds: 1), (t) => DateTime.now().difference(_lastSync));
+  }
+
+  void updateLastSync() {
+    _lastSync = DateTime.now();
+    ref.invalidate(getRepositoryProvider);
+  }
+}
+
+@Riverpod(keepAlive: true)
 class SearchController extends _$SearchController {
   @override
   String build() => 'Flutter';
 
   void onChanged(String value) {
-    state = value;
-    ref.invalidate(getRepositoryProvider);
+    if (value.isNotEmpty) {
+      state = value;
+    } else {
+      state = 'Flutter';
+    }
   }
 }
 
 @Riverpod(keepAlive: true)
 class ReposSorting extends _$ReposSorting {
   @override
-  SortBy build() => SortBy.defaultSort;
+  SortBy build() {
+    final sort = prefs.getString('sort');
+    if (sort == null) return SortBy.defaultSort;
+    return SortBy.values.firstWhere((e) => e.name == sort, orElse: () => SortBy.defaultSort);
+  }
 
   void onChanged(SortBy? value) {
     if (value == null) return;
     state = value;
+    prefs.setString('sort', value.name);
   }
 }
 

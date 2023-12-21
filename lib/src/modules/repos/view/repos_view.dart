@@ -16,7 +16,21 @@ class RepositoriesView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Repositories')),
+      appBar: AppBar(
+        title: const Text('Repositories'),
+        actions: [
+          Consumer(
+            builder: (_, ref, __) {
+              final lastSync = ref.watch(lastSyncProvider).value ?? Duration.zero;
+              if (lastSync.inMinutes < 30) return const SizedBox.shrink();
+              return IconButton(
+                onPressed: ref.read(lastSyncProvider.notifier).updateLastSync,
+                icon: const Icon(Icons.refresh),
+              );
+            },
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           NestedScrollView(

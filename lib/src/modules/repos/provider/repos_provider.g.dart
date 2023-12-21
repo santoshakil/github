@@ -21,7 +21,7 @@ final repositoriesProvider =
 );
 
 typedef _$Repositories = StreamNotifier<List<Repository>>;
-String _$getRepositoryHash() => r'443f764bb2f1e4c7c9b018c76f7c0b27a4acf8d8';
+String _$getRepositoryHash() => r'c0e1038e162c49715f74accb459ced7141942bd1';
 
 /// See also [GetRepository].
 @ProviderFor(GetRepository)
@@ -37,6 +37,20 @@ final getRepositoryProvider =
 );
 
 typedef _$GetRepository = AsyncNotifier<RepositoryResponse?>;
+String _$lastSyncHash() => r'4bb7d1b02ab8249de0f0254fadf3fc1c96f9a409';
+
+/// See also [LastSync].
+@ProviderFor(LastSync)
+final lastSyncProvider = StreamNotifierProvider<LastSync, Duration>.internal(
+  LastSync.new,
+  name: r'lastSyncProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$lastSyncHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$LastSync = StreamNotifier<Duration>;
 String _$searchControllerHash() => r'867522dec26456556f7e8e98ee3a356f318bd7f1';
 
 /// See also [SearchController].
@@ -53,7 +67,7 @@ final searchControllerProvider =
 );
 
 typedef _$SearchController = Notifier<String>;
-String _$reposSortingHash() => r'86f643b5d9985400cec164d4c6d09077685f5f22';
+String _$reposSortingHash() => r'1483833460105fd40874b068d875f5f25172be3d';
 
 /// See also [ReposSorting].
 @ProviderFor(ReposSorting)
@@ -67,7 +81,7 @@ final reposSortingProvider = NotifierProvider<ReposSorting, SortBy>.internal(
 );
 
 typedef _$ReposSorting = Notifier<SortBy>;
-String _$currentPageHash() => r'6ecae45fb1d76cfece1f4bfb501df362eb38fba7';
+String _$currentPageHash() => r'56472f88b43f6af05bb6763c786bd7c6f36aa362';
 
 /// See also [CurrentPage].
 @ProviderFor(CurrentPage)
