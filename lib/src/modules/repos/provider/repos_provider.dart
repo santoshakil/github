@@ -1,4 +1,5 @@
 import 'package:github/src/extensions/response.dart';
+import 'package:github/src/isolate/isolate.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../http/http.dart';
@@ -12,8 +13,10 @@ class SearchRepository extends _$SearchRepository {
   Future<List<Repository>> build() async {
     final query = ref.watch(searchControllerProvider);
     final res = await dio.get(Uris.searchRepos, queryParameters: {'q': query});
-    if (res.isSuccessful) return RepositoryResponse.fromJson(res.data).items ?? [];
-    return [];
+    if (!res.isSuccessful) return [];
+    final data = RepositoryResponse.fromJson(res.data).items ?? [];
+    sendPort.send(data.toList());
+    return data;
   }
 }
 
