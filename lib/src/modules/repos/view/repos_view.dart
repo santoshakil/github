@@ -17,20 +17,37 @@ class RepositoriesView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('Repositories')),
-      body: NestedScrollView(
-        headerSliverBuilder: (_, __) => [
-          SliverToBoxAdapter(
-              child: TextFormField(
-            onChanged: ref.read(searchControllerProvider.notifier).onChanged,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              hintText: 'Search',
-            ),
-          )),
-          const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
-          const SliverToBoxAdapter(child: SortByDropdown()),
+      body: Stack(
+        children: [
+          NestedScrollView(
+            headerSliverBuilder: (_, __) => [
+              SliverToBoxAdapter(
+                  child: TextFormField(
+                onChanged: ref.read(searchControllerProvider.notifier).onChanged,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  hintText: 'Search',
+                ),
+              )),
+              const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
+              const SliverToBoxAdapter(child: SortByDropdown()),
+            ],
+            body: const RepositoryListView(),
+          ),
+          Consumer(
+            builder: (_, ref, __) {
+              final data = ref.watch(getRepositoryProvider);
+              if (!data.isLoading) return const SizedBox.shrink();
+              return const Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
+          ),
         ],
-        body: const RepositoryListView(),
       ),
     );
   }
