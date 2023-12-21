@@ -25,7 +25,7 @@ class GetRepository extends _$GetRepository {
       final query = ref.watch(searchControllerProvider);
       final res = await dio.get(Uris.searchRepos, queryParameters: {
         'q': query,
-        'sort': sort.api,
+        if (sort.api != null) 'sort': sort.api,
         'page': ref.watch(currentPageProvider),
         'per_page': 10,
       });
@@ -56,7 +56,10 @@ class ReposSorting extends _$ReposSorting {
   @override
   SortBy build() => SortBy.defaultSort;
 
-  void onChanged(SortBy value) => state = value;
+  void onChanged(SortBy? value) {
+    if (value == null) return;
+    state = value;
+  }
 }
 
 @Riverpod(keepAlive: true)

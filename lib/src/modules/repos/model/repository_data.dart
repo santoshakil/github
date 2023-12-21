@@ -10,10 +10,10 @@ part 'repository_data.g.dart';
 enum SortBy {
   updatedAt('Updated At', 'updated_at'),
   stargazersCount('Stars', 'stargazers_count'),
-  defaultSort();
+  defaultSort('Default');
 
-  const SortBy([this.title, this.api]);
-  final String? title;
+  const SortBy(this.title, [this.api]);
+  final String title;
   final String? api;
 }
 

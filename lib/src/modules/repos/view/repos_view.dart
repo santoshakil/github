@@ -4,6 +4,7 @@ import 'package:github/src/extensions/context.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../details/view/repo_details_view.dart';
+import '../model/repository_data.dart';
 import '../model/repository_model.dart';
 import '../provider/repos_provider.dart';
 
@@ -16,17 +17,47 @@ class RepositoriesView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('Repositories')),
-      body: Column(
-        children: [
-          TextFormField(
+      body: NestedScrollView(
+        headerSliverBuilder: (_, __) => [
+          SliverToBoxAdapter(
+              child: TextFormField(
             onChanged: ref.read(searchControllerProvider.notifier).onChanged,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
               hintText: 'Search',
             ),
-          ),
-          const RepositoryListView(),
+          )),
+          const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
+          const SliverToBoxAdapter(child: SortByDropdown()),
         ],
+        body: const RepositoryListView(),
+      ),
+    );
+  }
+}
+
+class SortByDropdown extends ConsumerWidget {
+  const SortByDropdown({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(reposSortingProvider);
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+        child: SizedBox(
+          width: context.width * 0.5,
+          child: DropdownButtonFormField<SortBy>(
+            value: data,
+            onChanged: ref.read(reposSortingProvider.notifier).onChanged,
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.sort),
+              hintText: 'Sort By',
+            ),
+            items: [for (final item in SortBy.values) DropdownMenuItem(value: item, child: Text(item.title))],
+          ),
+        ),
       ),
     );
   }
@@ -41,14 +72,12 @@ class RepositoryListView extends ConsumerWidget {
     final data = ref.watch(repositoriesProvider);
     if (data.isLoading && apiDta.isLoading) return const Center(child: CircularProgressIndicator());
     if (data.hasError || apiDta.hasError) return Center(child: Text('${apiDta.error}'));
-    return Expanded(
-      child: ListView.separated(
-        controller: ref.watch(repoListScrollControllerProvider),
-        itemCount: data.value?.length ?? 0,
-        padding: const EdgeInsets.all(8.0),
-        separatorBuilder: (_, __) => const Divider(),
-        itemBuilder: (_, index) => RepositoryCard(data.value![index]),
-      ),
+    return ListView.separated(
+      controller: ref.watch(repoListScrollControllerProvider),
+      itemCount: data.value?.length ?? 0,
+      padding: const EdgeInsets.all(8.0),
+      separatorBuilder: (_, __) => const Divider(),
+      itemBuilder: (_, index) => RepositoryCard(data.value![index]),
     );
   }
 }
